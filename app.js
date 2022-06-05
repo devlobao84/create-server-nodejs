@@ -14,7 +14,7 @@ const server = http.createServer((req, res) => {
         // Save user 🍧
         fs.writeFile('users/' + params.id + '.txt', JSON.stringify(params), function (err) {
             if (err) throw err;
-            console.log('Saved!');
+            console.log('Create Saved!');
 
             res.statusCode = 200;
             res.setHeader('Content-Type', 'text/palin');
@@ -25,14 +25,24 @@ const server = http.createServer((req, res) => {
     // Select the user 🛡️
     else if (urlparse.pathname == "/select-user") {
         fs.readFile('users/' + params.id + '.txt', function (err, data) {
+            console.log('Select Save!')
             respons = data;
 
             res.statusCode = 200;
-            res.setHeader('Content-Type', 'text/palin');
+            res.setHeader('Content-Type', 'application/json');
             res.end(respons);
         });
     }
-    
+    // Remove user ☢️
+    else if (urlparse.pathname == "/remove-user") {
+        fs.unlink('users/' + params.id + '.txt', function (err) {
+            console.log('usuario removido')
+            respons = err ? "Ops, nao encotramos esse usuario!" : "Usuario REMOVIDO com sucesso";
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'text/palin');
+            res.end(respons);
+        })
+    }
 });
 
 //  Setting localhost address/URL
